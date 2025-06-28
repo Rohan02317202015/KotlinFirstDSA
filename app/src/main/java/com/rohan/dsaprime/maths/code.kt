@@ -6,8 +6,10 @@ import kotlin.math.min
 import kotlin.math.pow
 
 fun main(){
-    AllDivisors().brute(2341)
-    AllDivisors().optimal(2341)
+    val n = 151111
+    PrimeNumbers().brute(n)
+    PrimeNumbers().optimal(n)
+    AllDivisors().optimal(n)
 }
 
 
@@ -193,6 +195,31 @@ private class AllDivisors {
         }
 
         println("All divisors of $n is $result")
+    }
+}
+
+private class PrimeNumbers {
+    fun brute(n: Int){
+        val result = arrayListOf<Int>()
+        for (i in 1..n){
+            if ( n % i == 0){
+                result.add(i)
+            }
+        }
+        println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
+    }
+
+    fun optimal(n: Int){
+        val result = arrayListOf<Int>()
+        var i = 1
+        while ((i * i) <= n){
+            if(n % i == 0){
+                result.add(i)
+                result.add(n/i)
+            }
+            i += 1
+        }
+        println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
     }
 }
 
