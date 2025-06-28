@@ -6,6 +6,7 @@ import kotlin.math.min
 import kotlin.math.pow
 
 fun main(){
+   ArmStrong().optimal(54749)
 }
 
 
@@ -119,7 +120,22 @@ private class GCD {
     }
 }
 
-
+/*
+* ArmStrong Number
+* */
+private class ArmStrong {
+    fun optimal(n: Int){
+        var N = n
+        val pow = log10(n.toDouble()).toInt() + 1
+        var result = 0
+        while(N != 0){
+            val ld = N % 10
+            result += ld.toDouble().pow(pow).toInt()
+            N = N/10
+        }
+        println( (result == n) then "$n is an ArmStrong Number" otherWise "$n is not an ArmStrong number")
+    }
+}
 
 
 
