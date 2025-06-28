@@ -1,11 +1,11 @@
 package com.rohan.dsaprime.maths
 
+import com.rohan.dsaprime.then
 import kotlin.math.log10
 import kotlin.math.min
+import kotlin.math.pow
 
 fun main(){
-   val r = GCD().optimal(66,12)
-    println(r)
 }
 
 
@@ -78,7 +78,7 @@ private class PalindromeCheck {
 }
 
 /*
-* Find GCD
+* Find GCD or HCF
 * */
 private class GCD {
 
@@ -118,4 +118,8 @@ private class GCD {
         return optimal(n2 , n1%n2)
     }
 }
+
+
+
+
 
