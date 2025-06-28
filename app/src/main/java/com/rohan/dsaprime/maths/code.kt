@@ -1,9 +1,11 @@
 package com.rohan.dsaprime.maths
 
 import kotlin.math.log10
+import kotlin.math.min
 
 fun main(){
-    NumberReversal().optimal(12345)
+   val r = GCD().optimal(66,12)
+    println(r)
 }
 
 
@@ -56,4 +58,64 @@ private class NumberReversal {
     }
 }
 
+/*
+* Palindrome Number
+* */
+private class PalindromeCheck {
+
+    /* TC: LogN */
+    fun optimal(n: Int){
+        var N = n
+        var reverse = 0
+        while (N != 0){
+            val lastDigit = N % 10
+            reverse = (reverse * 10) + lastDigit
+            N = N/10
+        }
+
+        println("The Number is ${ if(n == reverse) "a Palindrome" else "not a Palindrome" }")
+    }
+}
+
+/*
+* Find GCD
+* */
+private class GCD {
+
+    /* TC: O(min(n1,n2))*/
+    fun brute(n1: Int, n2: Int){
+
+        var gcd = 1
+        for( i in 1..min(n1, n2)){
+            if(n1 % i == 0 && n2 % i ==0){
+                gcd = i
+            }
+        }
+
+        println("GCD of $n1 & $n2 is $gcd")
+    }
+
+    /* TC: O(min(n1,n2))*/
+    fun better(n1: Int, n2: Int){
+
+        // Just reverse the brute war
+        // Find divisor reverse way
+        var gcd = 0
+        for( i in min(n1,n2)downTo 1){
+            if(n1 % i == 0 && n2 % i == 0){
+                gcd = i
+                break
+            }
+        }
+        println("GCD of $n1 & $n2 is $gcd")
+    }
+
+    /* TC: O(Log(min(n1,n2)))*/
+    fun optimal(n1: Int, n2: Int): Int {
+        if( n2 <= 0 )
+            return n1
+
+        return optimal(n2 , n1%n2)
+    }
+}
 
