@@ -6,7 +6,8 @@ import kotlin.math.min
 import kotlin.math.pow
 
 fun main(){
-   ArmStrong().optimal(54749)
+    AllDivisors().brute(2341)
+    AllDivisors().optimal(2341)
 }
 
 
@@ -37,8 +38,6 @@ private class CountNDigits{
         println("Total Digits in Number $n is $result")
     }
 }
-
-
 
 /*
 * Reverse a number
@@ -124,6 +123,8 @@ private class GCD {
 * ArmStrong Number
 * */
 private class ArmStrong {
+
+    /* TC: LogN */
     fun optimal(n: Int){
         var N = n
         val pow = log10(n.toDouble()).toInt() + 1
@@ -137,5 +138,62 @@ private class ArmStrong {
     }
 }
 
+/*
+* Find all the divisors of a Number
+* */
+private class AllDivisors {
+
+    /*
+    * Divisor means a number which can
+    * divide a number such that we get
+    * remainder 0.
+    * This approach iterates through N
+    * and check divisibility through Modulo
+    * operator.
+    * TC: O(N)
+    * */
+    fun brute(n: Int){
+        val resultList = arrayListOf<Int>()
+        for(i in 1..n){
+            if(n % i == 0)
+                resultList.add(i)
+        }
+        println("All divisors of $n is $resultList")
+
+    }
+
+    /*
+    * To optimise brute solution,
+    * we can observe that divisors
+    * increases only till square root
+    * of N and after that it start to
+    * decrease. And if we observe the part
+    * after the sq. root of N it gives a
+    * mirror of the above divisors
+    * Eg no is 16, sq root of 16 is 4
+    * 1 x 16
+    * 2 x 8
+    * 4 x 4 -> Here we reached to square root
+    * 8 x 2 -> And from here mirror starts
+    * 16 x 1
+    *
+    * TC: O(sq_root(N))
+    * */
+    fun optimal(n: Int){
+        val result = arrayListOf<Int>()
+        var i = 1
+
+        while ((i * i) <= n){
+            // i * i make sure loop till sq. root of N
+            if(n % i == 0 ) {
+                result.add(i)
+                result.add(n/i)
+            }
+            i += 1
+        }
+
+        println("All divisors of $n is $result")
+    }
+}
 
 
