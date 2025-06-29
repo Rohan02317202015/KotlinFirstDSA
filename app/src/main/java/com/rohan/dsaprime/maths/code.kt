@@ -7,8 +7,8 @@ import kotlin.math.pow
 
 fun main(){
     val n = 151111
-    PrimeNumbers().brute(n)
-    PrimeNumbers().optimal(n)
+    Exponential().brute(7,2)
+    PrimeNumbers().CheckPrime().optimal(n)
     AllDivisors().optimal(n)
 }
 
@@ -112,7 +112,10 @@ private class GCD {
         println("GCD of $n1 & $n2 is $gcd")
     }
 
-    /* TC: O(Log(min(n1,n2)))*/
+    /*
+    * Done by Euclidean Theorem
+    * TC: O(Log(min(n1,n2)))
+    * */
     fun optimal(n1: Int, n2: Int): Int {
         if( n2 <= 0 )
             return n1
@@ -198,29 +201,76 @@ private class AllDivisors {
     }
 }
 
+/*
+* Check Prime or not
+* */
 private class PrimeNumbers {
-    fun brute(n: Int){
-        val result = arrayListOf<Int>()
-        for (i in 1..n){
-            if ( n % i == 0){
-                result.add(i)
+
+    inner class CheckPrime {
+        fun brute(n: Int) {
+            val result = arrayListOf<Int>()
+            for (i in 1..n) {
+                if (n % i == 0) {
+                    result.add(i)
+                }
             }
+            println("$n is ${(result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}")
         }
-        println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
+
+        fun optimal(n: Int){
+            val result = arrayListOf<Int>()
+            var i = 1
+            while ((i * i) <= n){
+                if(n % i == 0){
+                    result.add(i)
+                    result.add(n/i)
+                }
+                i += 1
+            }
+            println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
+        }
     }
 
-    fun optimal(n: Int){
-        val result = arrayListOf<Int>()
-        var i = 1
-        while ((i * i) <= n){
-            if(n % i == 0){
-                result.add(i)
-                result.add(n/i)
+    inner class FindAll {
+
+        fun optimal(N: Int){
+            var n = N
+            var i = 2
+            val result = arrayListOf<Int>()
+
+            while ( (i*i) <= n){
+
+                if(n % i == 0){
+                    result.add(i)
+                    while(n % i == 0){ n = n/i }
+                }
+
+                i = i + 1
             }
-            i += 1
+
+            if(n > 1)
+                result.add(n)
+
+            println("All Prime factors of $N is $result")
         }
-        println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
     }
+
 }
 
 
+private class Exponential {
+    fun brute(a: Int, b: Int){
+        var result = 1L
+        var base = a
+        var exp = b
+
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result *= base
+            }
+            base *= base
+            exp /= 2
+        }
+        println("Exponential of $a to $b is $result")
+    }
+}
