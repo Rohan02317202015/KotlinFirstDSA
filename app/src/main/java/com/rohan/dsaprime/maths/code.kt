@@ -12,8 +12,8 @@ fun main(){
         add(Pair(1,10))
         add(Pair(11,19))
     }
-    PrimeNumbers().FindAllPrimeFactorsTillN().optimal(n)
-    PrimeNumbers().FindAllPrimeFactorsInRange().brute(list)
+//    PrimeNumbers().FindAllPrimeFactorsTillN().optimal(n)
+    PrimeNumbers().FindAllPrimeFactorsInRange().optimal(list)
 }
 
 
@@ -389,19 +389,68 @@ private class PrimeNumbers {
                         result.add(i)
                 }
 
-                println("Prime factors from ${query.first} to ${query.second} is $result")
+                println("Number of Prime factors from ${query.first} to ${query.second} is ${result.size}")
             }
         }
 
         /*
+        * In brute we get the solution but TC is huge
+        * hence by using Sieve and Prefix Sum we can
+        * reduce this to optimum by introducing space
+        * complexity of O(max R)
         *
+        * 1. Create a Prime Array for max R + 1
+        * 2. Put 1 in every prime indexes
+        * 3. Sum them using prefix sum
+        * 4. Iterate through queries and find
+        * prefixSum[right] - prefixSum[left]
+        *
+        * Note: It will only tell you the number of
+        * Primes in that range not the values itself
+        *
+        * TC: O( Q + N * LogLogN + R + Q )
+        * which summarises to
+        * => O ( Q + N * LogLogN )
+        * SC: O(R)
         * */
         fun optimal(queries: List<Pair<Int,Int>>){
+            // Step 1 : O(Q)
+            val maxRight = queries.maxBy { it.second }.second // O(Q)
+            val primeArr = Array( maxRight + 1) {1}
+            primeArr[0] = 0
+            primeArr[1] = 0
+            var i = 2
+            // Step 2
+            // This whole sieve is O(N * LogLog(N))
+            while ( i*i <= maxRight){
+                if(primeArr[i] == 1){
+                    for( multiples in i*i..primeArr.size-1 step i ) {
+                        primeArr[multiples] = 0
+                    }
+                }
+                i += 1
+            }
 
+            // Step 3: O(R)
+
+            // Running Fold includes the initial
+            // accumulator ie 0 and push it to 0 index
+            // .drop(1) will drop first element on
+            // resultant array ie index 0
+            val prefixSumArr = primeArr
+                .runningFold(0) { accumulated, nextNum ->
+                    accumulated + nextNum
+                }.drop(1)
+
+
+            //Step 4: O(Q)
+            queries.forEach { query ->
+                val (left, right) = query
+                val primeCount = prefixSumArr[right] - prefixSumArr[left -1]
+                println("Total number of Prime counts from $left to $right is $primeCount")
+            }
         }
     }
-
-
 }
 
 
