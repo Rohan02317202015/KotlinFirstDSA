@@ -6,9 +6,11 @@ import kotlin.math.min
 import kotlin.math.pow
 
 fun main(){
-    val n = 151111
-    Exponential().brute(7,2)
-    PrimeNumbers().CheckPrime().optimal(n)
+    val n = 10
+    Exponential().brute(n,2)
+    PrimeNumbers().FindAllPrimeFactorsOfN().optimal(n)
+    PrimeNumbers().FindAllPrimeFactorsTillN().brute(n)
+    PrimeNumbers().FindAllPrimeFactorsTillN().optimal(n)
     AllDivisors().optimal(n)
 }
 
@@ -144,7 +146,11 @@ private class ArmStrong {
 }
 
 /*
-* Find all the divisors of a Number
+* Find all the divisors of a Number N
+* Which means it can be Prime &
+* Non Prime Number
+* eg: 126
+* [1, 126, 2, 63, 3, 42, 6, 21, 7, 18, 9, 14]
 * */
 private class AllDivisors {
 
@@ -202,11 +208,20 @@ private class AllDivisors {
 }
 
 /*
-* Check Prime or not
+* Prime Numbers/Factors
+* Prime Numbers are those numbers
+* which is exactly divisible by two
+* numbers ie, 1 and the N itself
 * */
 private class PrimeNumbers {
 
+    /*
+    * Check IF a given number N is
+    * Prime of Not
+    * */
     inner class CheckPrime {
+
+        /*TC: O(N) */
         fun brute(n: Int) {
             val result = arrayListOf<Int>()
             for (i in 1..n) {
@@ -217,7 +232,8 @@ private class PrimeNumbers {
             println("$n is ${(result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}")
         }
 
-        fun optimal(n: Int){
+        /*TC: O(sqRoot(N)) */
+        fun optimal(n: Int): Boolean{
             val result = arrayListOf<Int>()
             var i = 1
             while ((i * i) <= n){
@@ -228,17 +244,24 @@ private class PrimeNumbers {
                 i += 1
             }
             println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
+            return result.size == 2
         }
     }
 
-    inner class FindAll {
-
+    /*
+    * Find all Prime Factors of a Number N
+    * Which means only Prime Numbers
+    * eg: 126
+    * [2, 3, 7]
+    *
+    * */
+    inner class FindAllPrimeFactorsOfN {
         fun optimal(N: Int){
             var n = N
             var i = 2
             val result = arrayListOf<Int>()
 
-            while ( (i*i) <= n){
+            while ( (i*i) <= n ){
 
                 if(n % i == 0){
                     result.add(i)
@@ -255,10 +278,97 @@ private class PrimeNumbers {
         }
     }
 
+    /*
+    * Find all Prime Factors of a Number N
+    * Which means only Prime Numbers
+    * eg: 126
+    * [2, 3, 7]
+    * */
+    inner class FindAllPrimeFactorsTillN {
+
+        /*
+        * This approach iterates through each number
+        * and check if prime or not
+        * TC: O( N * sq_root(N)) => N raise to 3/2
+        * */
+        fun brute(n: Int){
+            val result = arrayListOf<Int>()
+            val checkPrime = CheckPrime()
+            for(i in 2..n){    // O(N)
+                if(checkPrime.optimal(i)){  //O(Sq_root(N))
+                    result.add(i)
+                }
+            }
+
+            println("All Prime factors till $n is $result")
+        }
+
+        /*
+        * To optimise brute solution
+        * We can pre-compute things
+        * This algo is called
+        * "Sieve of Eratosthenes" => "e-ruh-tows-theh-neez"
+        * TC: The time complexity for this solution is already
+        * been proofed by mathematician hence as it seems
+        * => O(N) + O(sqRoot(N) * LogN) + O(N)
+        * but the proven by the mathematician is
+        * => O( N * Log (LogN) ) // consider this
+        * SC: O(N)
+        * */
+        fun optimal(n: Int){
+            val primeArray = BooleanArray(n+1) { true } // pre-initialise
+            primeArray[0] = false // Because 1 and 0 are not
+            primeArray[1] = false // prime number
+            var i = 2
+            while (i * i <= n) { // till square root of N
+                if(primeArray[i]){
+                    var j = i * i
+                    for(multiple in  j..n step i){
+                        primeArray[multiple] = false
+                    }
+                }
+                i += 1
+            }
+
+            val result = (2..n).filter { primeArray[it] }
+            println("All prime number till $n are $result")
+        }
+    }
+
+
+    /*
+    * This problem statement states that
+    * A query is given Q which contains ranges like
+    * L = 1, R = 10
+    * L = 2, R = 7
+    * L = 4, R = 20, and so on
+    * such that:
+    *  0 < Q <= 10 pow 5
+    *  0 < L < R <= 10 pow 6
+    * */
+    inner class FindAllPrimeFactorsInRange {
+
+        /*
+        *
+        * */
+        fun brute(queries: List<Pair<Int,Int>>){
+
+        }
+
+        /*
+        *
+        * */
+        fun optimal(queries: List<Pair<Int,Int>>){
+
+        }
+    }
+
+
 }
 
 
 private class Exponential {
+
     fun brute(a: Int, b: Int){
         var result = 1L
         var base = a
