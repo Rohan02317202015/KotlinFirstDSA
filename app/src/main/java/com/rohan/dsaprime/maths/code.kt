@@ -7,11 +7,13 @@ import kotlin.math.pow
 
 fun main(){
     val n = 10
-    Exponential().brute(n,2)
-    PrimeNumbers().FindAllPrimeFactorsOfN().optimal(n)
-    PrimeNumbers().FindAllPrimeFactorsTillN().brute(n)
+    val list = arrayListOf<Pair<Int,Int>>().apply {
+        add(Pair(2,10))
+        add(Pair(1,10))
+        add(Pair(11,19))
+    }
     PrimeNumbers().FindAllPrimeFactorsTillN().optimal(n)
-    AllDivisors().optimal(n)
+    PrimeNumbers().FindAllPrimeFactorsInRange().brute(list)
 }
 
 
@@ -349,10 +351,46 @@ private class PrimeNumbers {
     inner class FindAllPrimeFactorsInRange {
 
         /*
+        * This approach will iterate through
+        * all the queries and find primes
         *
+        * TC: O( Q * R * sqrt(N) )
+        * where:
+        * Q: is the number of queries,
+        * R: in worst case right, as left is 2
+        * N: to check prime of a number in range L to R
+        *
+        * Observations:
+        * Here if Q is 10 pow 5 and
+        * R is going to 10 pow 6
+        * and the sqrt of N
+        * its huge, hence to reduce this
+        *
+        * we cannot reduce Q TC as we have
+        * to iterate through each of the queries
+        * but can reduce R TC
+        * by not to computing each of the range
+        * again and again but just by computing
+        * this once. See in optimal solution
         * */
         fun brute(queries: List<Pair<Int,Int>>){
 
+            queries.forEach { query -> // O (Q)
+
+                var (left, right) = query
+                if(left < 2)
+                    left = 2 // to avoid 0 and 1 to be added
+
+                val result = arrayListOf<Int>()
+                val checkPrime = CheckPrime()
+
+                for( i in left..right){ // O( right - left + 1 )
+                    if(checkPrime.optimal(i))  // O(sqrt(i))
+                        result.add(i)
+                }
+
+                println("Prime factors from ${query.first} to ${query.second} is $result")
+            }
         }
 
         /*
