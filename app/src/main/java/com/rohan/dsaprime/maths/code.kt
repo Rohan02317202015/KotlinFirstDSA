@@ -5,31 +5,32 @@ import kotlin.math.log10
 import kotlin.math.min
 import kotlin.math.pow
 
-fun main(){
+fun main() {
     val n = 10
-    val list = arrayListOf<Pair<Int,Int>>().apply {
-        add(Pair(2,10))
-        add(Pair(1,10))
-        add(Pair(11,19))
+    val list = arrayListOf<Int>().apply {
+
+        add(84)
+        add(257)
     }
-//    PrimeNumbers().FindAllPrimeFactorsTillN().optimal(n)
-    PrimeNumbers().FindAllPrimeFactorsInRange().optimal(list)
+
+    PrimeNumbers().FindAllSPFInRange().brute(list)
+    PrimeNumbers().FindAllSPFInRange().optimal(list)
 }
 
 
 /*
 * Count No of digits in N
 * */
-private class CountNDigits{
+private class CountNDigits {
 
     /*
     * TC: LogN
     * */
-    fun brute(n: Int){
+    fun brute(n: Int) {
         var N = n
         var count = 0;
-        while(N != 0){
-            N = N/10
+        while (N != 0) {
+            N = N / 10
             count++
         }
         println("Total Digits in Number $n is $count")
@@ -38,9 +39,9 @@ private class CountNDigits{
     /*
     * TC: O(1)
     * */
-    fun optimal(n: Int){
+    fun optimal(n: Int) {
         val N = n
-        val result = if(N == 0) 0 else log10(N.toDouble()).toInt() + 1
+        val result = if (N == 0) 0 else log10(N.toDouble()).toInt() + 1
         println("Total Digits in Number $n is $result")
     }
 }
@@ -51,13 +52,13 @@ private class CountNDigits{
 private class NumberReversal {
 
     /* TC: LogN */
-    fun optimal(n: Int){
+    fun optimal(n: Int) {
         var N = n
         var reverse = 0
-        while (N != 0){
+        while (N != 0) {
             val lastDigit = N % 10
             reverse = (reverse * 10) + lastDigit
-            N = N/10
+            N = N / 10
         }
 
         println("Reverse of Number $n is $reverse")
@@ -70,16 +71,16 @@ private class NumberReversal {
 private class PalindromeCheck {
 
     /* TC: LogN */
-    fun optimal(n: Int){
+    fun optimal(n: Int) {
         var N = n
         var reverse = 0
-        while (N != 0){
+        while (N != 0) {
             val lastDigit = N % 10
             reverse = (reverse * 10) + lastDigit
-            N = N/10
+            N = N / 10
         }
 
-        println("The Number is ${ if(n == reverse) "a Palindrome" else "not a Palindrome" }")
+        println("The Number is ${if (n == reverse) "a Palindrome" else "not a Palindrome"}")
     }
 }
 
@@ -89,11 +90,11 @@ private class PalindromeCheck {
 private class GCD {
 
     /* TC: O(min(n1,n2))*/
-    fun brute(n1: Int, n2: Int){
+    fun brute(n1: Int, n2: Int) {
 
         var gcd = 1
-        for( i in 1..min(n1, n2)){
-            if(n1 % i == 0 && n2 % i ==0){
+        for (i in 1..min(n1, n2)) {
+            if (n1 % i == 0 && n2 % i == 0) {
                 gcd = i
             }
         }
@@ -102,13 +103,13 @@ private class GCD {
     }
 
     /* TC: O(min(n1,n2))*/
-    fun better(n1: Int, n2: Int){
+    fun better(n1: Int, n2: Int) {
 
         // Just reverse the brute war
         // Find divisor reverse way
         var gcd = 0
-        for( i in min(n1,n2)downTo 1){
-            if(n1 % i == 0 && n2 % i == 0){
+        for (i in min(n1, n2) downTo 1) {
+            if (n1 % i == 0 && n2 % i == 0) {
                 gcd = i
                 break
             }
@@ -121,10 +122,10 @@ private class GCD {
     * TC: O(Log(min(n1,n2)))
     * */
     fun optimal(n1: Int, n2: Int): Int {
-        if( n2 <= 0 )
+        if (n2 <= 0)
             return n1
 
-        return optimal(n2 , n1%n2)
+        return optimal(n2, n1 % n2)
     }
 }
 
@@ -134,16 +135,16 @@ private class GCD {
 private class ArmStrong {
 
     /* TC: LogN */
-    fun optimal(n: Int){
+    fun optimal(n: Int) {
         var N = n
         val pow = log10(n.toDouble()).toInt() + 1
         var result = 0
-        while(N != 0){
+        while (N != 0) {
             val ld = N % 10
             result += ld.toDouble().pow(pow).toInt()
-            N = N/10
+            N = N / 10
         }
-        println( (result == n) then "$n is an ArmStrong Number" otherWise "$n is not an ArmStrong number")
+        println((result == n) then "$n is an ArmStrong Number" otherWise "$n is not an ArmStrong number")
     }
 }
 
@@ -165,10 +166,10 @@ private class AllDivisors {
     * operator.
     * TC: O(N)
     * */
-    fun brute(n: Int){
+    fun brute(n: Int) {
         val resultList = arrayListOf<Int>()
-        for(i in 1..n){
-            if(n % i == 0)
+        for (i in 1..n) {
+            if (n % i == 0)
                 resultList.add(i)
         }
         println("All divisors of $n is $resultList")
@@ -192,20 +193,38 @@ private class AllDivisors {
     *
     * TC: O(sq_root(N))
     * */
-    fun optimal(n: Int){
+    fun optimal(n: Int) {
         val result = arrayListOf<Int>()
         var i = 1
 
-        while ((i * i) <= n){
+        while ((i * i) <= n) {
             // i * i make sure loop till sq. root of N
-            if(n % i == 0 ) {
+            if (n % i == 0) {
                 result.add(i)
-                result.add(n/i)
+                result.add(n / i)
             }
             i += 1
         }
 
         println("All divisors of $n is $result")
+    }
+}
+
+private class Exponential {
+
+    fun brute(a: Int, b: Int) {
+        var result = 1L
+        var base = a
+        var exp = b
+
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result *= base
+            }
+            base *= base
+            exp /= 2
+        }
+        println("Exponential of $a to $b is $result")
     }
 }
 
@@ -235,17 +254,17 @@ private class PrimeNumbers {
         }
 
         /*TC: O(sqRoot(N)) */
-        fun optimal(n: Int): Boolean{
+        fun optimal(n: Int): Boolean {
             val result = arrayListOf<Int>()
             var i = 1
-            while ((i * i) <= n){
-                if(n % i == 0){
+            while ((i * i) <= n) {
+                if (n % i == 0) {
                     result.add(i)
-                    result.add(n/i)
+                    result.add(n / i)
                 }
                 i += 1
             }
-            println( "$n is ${ (result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}" )
+            println("$n is ${(result.size > 2) then "not a Prime Number" otherWise "a Prime Number"}")
             return result.size == 2
         }
     }
@@ -258,22 +277,24 @@ private class PrimeNumbers {
     *
     * */
     inner class FindAllPrimeFactorsOfN {
-        fun optimal(N: Int){
+        fun optimal(N: Int) {
             var n = N
             var i = 2
             val result = arrayListOf<Int>()
 
-            while ( (i*i) <= n ){
+            while ((i * i) <= n) {
 
-                if(n % i == 0){
+                if (n % i == 0) {
                     result.add(i)
-                    while(n % i == 0){ n = n/i }
+                    while (n % i == 0) {
+                        n = n / i
+                    }
                 }
 
                 i = i + 1
             }
 
-            if(n > 1)
+            if (n > 1)
                 result.add(n)
 
             println("All Prime factors of $N is $result")
@@ -293,11 +314,11 @@ private class PrimeNumbers {
         * and check if prime or not
         * TC: O( N * sq_root(N)) => N raise to 3/2
         * */
-        fun brute(n: Int){
+        fun brute(n: Int) {
             val result = arrayListOf<Int>()
             val checkPrime = CheckPrime()
-            for(i in 2..n){    // O(N)
-                if(checkPrime.optimal(i)){  //O(Sq_root(N))
+            for (i in 2..n) {    // O(N)
+                if (checkPrime.optimal(i)) {  //O(Sq_root(N))
                     result.add(i)
                 }
             }
@@ -317,15 +338,15 @@ private class PrimeNumbers {
         * => O( N * Log (LogN) ) // consider this
         * SC: O(N)
         * */
-        fun optimal(n: Int){
-            val primeArray = BooleanArray(n+1) { true } // pre-initialise
+        fun optimal(n: Int) {
+            val primeArray = BooleanArray(n + 1) { true } // pre-initialise
             primeArray[0] = false // Because 1 and 0 are not
             primeArray[1] = false // prime number
             var i = 2
             while (i * i <= n) { // till square root of N
-                if(primeArray[i]){
+                if (primeArray[i]) {
                     var j = i * i
-                    for(multiple in  j..n step i){
+                    for (multiple in j..n step i) {
                         primeArray[multiple] = false
                     }
                 }
@@ -373,19 +394,19 @@ private class PrimeNumbers {
         * again and again but just by computing
         * this once. See in optimal solution
         * */
-        fun brute(queries: List<Pair<Int,Int>>){
+        fun brute(queries: List<Pair<Int, Int>>) {
 
             queries.forEach { query -> // O (Q)
 
                 var (left, right) = query
-                if(left < 2)
+                if (left < 2)
                     left = 2 // to avoid 0 and 1 to be added
 
                 val result = arrayListOf<Int>()
                 val checkPrime = CheckPrime()
 
-                for( i in left..right){ // O( right - left + 1 )
-                    if(checkPrime.optimal(i))  // O(sqrt(i))
+                for (i in left..right) { // O( right - left + 1 )
+                    if (checkPrime.optimal(i))  // O(sqrt(i))
                         result.add(i)
                 }
 
@@ -413,18 +434,18 @@ private class PrimeNumbers {
         * => O ( Q + N * LogLogN )
         * SC: O(R)
         * */
-        fun optimal(queries: List<Pair<Int,Int>>){
+        fun optimal(queries: List<Pair<Int, Int>>) {
             // Step 1 : O(Q)
             val maxRight = queries.maxBy { it.second }.second // O(Q)
-            val primeArr = Array( maxRight + 1) {1}
+            val primeArr = Array(maxRight + 1) { 1 }
             primeArr[0] = 0
             primeArr[1] = 0
             var i = 2
             // Step 2
             // This whole sieve is O(N * LogLog(N))
-            while ( i*i <= maxRight){
-                if(primeArr[i] == 1){
-                    for( multiples in i*i..primeArr.size-1 step i ) {
+            while (i * i <= maxRight) {
+                if (primeArr[i] == 1) {
+                    for (multiples in i * i..primeArr.size - 1 step i) {
                         primeArr[multiples] = 0
                     }
                 }
@@ -446,28 +467,96 @@ private class PrimeNumbers {
             //Step 4: O(Q)
             queries.forEach { query ->
                 val (left, right) = query
-                val primeCount = prefixSumArr[right] - prefixSumArr[left -1]
+                val primeCount = prefixSumArr[right] - prefixSumArr[left - 1]
                 println("Total number of Prime counts from $left to $right is $primeCount")
             }
         }
     }
-}
 
+    /*
+    * This problem statement states that
+    * A query is given Q which contains a number like
+    * 10
+    * 7
+    * 20, and so on
+    * such that:
+    *  0 < Q <= 10 pow 5
+    *  0 < Q[i] <= 10 pow 6
+    *
+    * We have to find All Smallest Prime Factors of N
+    * Repetition is allowed
+    * */
+    inner class FindAllSPFInRange {
 
-private class Exponential {
+        /*
+        * In this approach we'll iterates each
+        * and every query and its number
+        * */
+        fun brute(queries: List<Int>) {
+            val result: ArrayList<Pair<Int, List<Int>>> = arrayListOf()
+            queries.forEach { value ->
 
-    fun brute(a: Int, b: Int){
-        var result = 1L
-        var base = a
-        var exp = b
+                var number = value
+                val pair = Pair<Int, ArrayList<Int>>(number, arrayListOf())
+                var i = 2
 
-        while (exp > 0) {
-            if (exp % 2 == 1) {
-                result *= base
+                while (i * i <= number) {
+                    while (number % i == 0) {
+                        pair.second.add(i)
+                        number = number / i
+                    }
+                    i += 1
+                }
+                if (number > 1) {
+                    pair.second.add(number)
+                }
+                result.add(pair)
             }
-            base *= base
-            exp /= 2
+
+            for (pair in result) {
+                val (number, spfs) = pair
+                println("SPF of $number is $spfs")
+            }
         }
-        println("Exponential of $a to $b is $result")
+
+
+        /*
+        *
+        * To optimize the brute way we would use
+        * pre-computation like will be creating an
+        * array for largest number available in the
+        * query( +1 as array indexes starts from 0)
+        * with value as their index so arr[4] contains
+        * 4, hence index == value.
+        * Then we will run a loop and check, let say i as index
+        * 1.
+        * */
+        fun optimal(queries: List<Int>) {
+            val maxOut = queries.maxBy { it }
+            val preArray = Array(maxOut + 1) { it }
+            var i = 2
+
+            while (i * i < maxOut) {
+                for (multiples in i * i..maxOut step i) {
+                    if (preArray[multiples] == multiples)
+                        preArray[multiples] = i
+                }
+                i += 1
+            }
+            val resultList = arrayListOf<Pair<Int, List<Int>>>()
+            queries.forEach { query ->
+                var number = query
+                val result = Pair(number, arrayListOf<Int>())
+                while (number != 1) {
+                    result.second.add(preArray[number])
+                    number = number / preArray[number]
+                }
+                resultList.add(result)
+            }
+
+            resultList.forEach { result ->
+                println("SPF of ${result.first} is ${result.second}")
+            }
+        }
     }
 }
