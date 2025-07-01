@@ -528,11 +528,15 @@ private class PrimeNumbers {
         * query( +1 as array indexes starts from 0)
         * with value as their index so arr[4] contains
         * 4, hence index == value.
-        * Then we will run a loop and check, let say i as index
-        * 1.
+        * Finally pre-computed array will be manipulated
+        * and it will save each numbers SPF as their value
+        *
+        * Then we will iterate through all the queries and
+        * and check each numbers SPF and divide it with same
+        * until getting getting 1 as remaining number
         * */
         fun optimal(queries: List<Int>) {
-            val maxOut = queries.maxBy { it }
+            val maxOut = queries.maxBy { it } // taking out max numbers
             val preArray = Array(maxOut + 1) { it }
             var i = 2
 
