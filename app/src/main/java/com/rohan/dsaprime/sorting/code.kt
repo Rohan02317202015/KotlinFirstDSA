@@ -1,12 +1,8 @@
 package com.rohan.dsaprime.sorting
 
-import kotlinx.coroutines.flow.merge
-
-
 fun main() {
-
     val array = arrayOf(4, 5, 2, 3, 1, 1)
-    MergeSort().mergeSort(array, 0, 5)
+    QuickSort().sort(array, 0, 5)
     println("After Sorting: ${array.toList()}")
 }
 
@@ -91,25 +87,49 @@ private class InsertionSort {
     }
 }
 
+/**
+ * MergeSort class: Implements the merge sort algorithm.
+ *
+ * Merge sort is a stable, divide-and-conquer sorting algorithm that recursively splits the array into halves,
+ * sorts each half, and then merges the sorted halves to produce the final sorted array.
+ *
+ * Time Complexity: O(N log N)
+ * Space Complexity: O(N) (due to the temporary array used during merging)
+ */
 private class MergeSort {
 
+    /**
+     * Recursively sorts the array from index [low] to [high] using merge sort.
+     *
+     * @param arr The array to be sorted.
+     * @param low The starting index of the subarray to sort.
+     * @param high The ending index of the subarray to sort.
+     */
     fun mergeSort(arr: Array<Int>, low: Int, high: Int) {
-
+        // Base case: If the subarray has one or no elements, it is already sorted
         if (low >= high) return //base condition
 
         val mid = (low + high) / 2
 
-        //left array partition
+        // Recursively sort the left half
         mergeSort(arr, low, mid)
 
-        // right array partition
+        // Recursively sort the right half
         mergeSort(arr, mid + 1, high)
 
-        // merge both parts here
+        // Merge the two sorted halves
         merge(arr, low, mid, high)
-
     }
 
+    /**
+     * Merges two sorted subarrays of [array].
+     * The first subarray is from [low] to [mid], the second is from [mid+1] to [high].
+     *
+     * @param array The array containing the subarrays to merge.
+     * @param low The starting index of the first subarray.
+     * @param mid The ending index of the first subarray.
+     * @param high The ending index of the second subarray.
+     */
     private fun merge(array: Array<Int>, low: Int, mid: Int, high: Int) {
         val temp = arrayListOf<Int>()
         var left = low
@@ -152,5 +172,72 @@ private class MergeSort {
         for (i in low..high) {
             array[i] = temp[i - low]
         }
+    }
+}
+
+/**
+ * QuickSort class: Implements the quick sort algorithm.
+ *
+ * Quick sort is an efficient, in-place, divide-and-conquer sorting algorithm that partitions the array
+ * around a pivot element, recursively sorts the subarrays on either side of the pivot, and combines the results.
+ *
+ * Time Complexity: Average O(N log N), Worst O(N^2)
+ * Space Complexity: O(log N) (due to recursion stack)
+ */
+private class QuickSort {
+
+    /**
+     * Recursively sorts the array from index [low] to [high] using quick sort.
+     *
+     * @param arr The array to be sorted.
+     * @param low The starting index of the subarray to sort.
+     * @param high The ending index of the subarray to sort.
+     */
+    fun sort(arr: Array<Int>, low: Int, high: Int){
+        if(low < high) {
+            // Partition the array and get the pivot index
+            val pivotIdx = partition(arr, low, high)
+            // Recursively sort elements before and after partition
+            sort(arr, low, pivotIdx - 1)
+            sort(arr, pivotIdx + 1, high)
+        }
+    }
+
+    /**
+     * Partitions the subarray [low to high] around a pivot element.
+     * Elements less than or equal to the pivot are moved to the left,
+     * and elements greater than the pivot are moved to the right.
+     *
+     * @param arr The array to partition.
+     * @param low The starting index of the subarray.
+     * @param high The ending index of the subarray.
+     * @return The final index of the pivot element.
+     */
+    private fun partition(arr: Array<Int>, low: Int, high: Int): Int{
+        var pivot = arr[low]
+        var i = low
+        var j = high
+        // Move indices towards each other and swap elements as needed
+        while(i < j){
+            if( arr[i] <= pivot ){
+                i++
+            }
+
+            if( arr[j] > pivot ) {
+                j--
+            }
+
+            if( i < j) { // swap if i & j haven't crossed them
+                arr[i] += arr[j]
+                arr[j] = arr[i] - arr[j]
+                arr[i] = arr[i] - arr[j]
+            }
+        }
+
+        // Place the pivot in its correct sorted position
+        arr[low] += arr[j]
+        arr[j] = arr[low] - arr[j]
+        arr[low] = arr[low] - arr[j]
+        return j
     }
 }
