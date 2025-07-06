@@ -6,7 +6,6 @@ import kotlin.math.min
 import kotlin.math.pow
 
 fun main() {
-    val n = 10
     val list = arrayListOf<Int>().apply {
 
         add(84)
