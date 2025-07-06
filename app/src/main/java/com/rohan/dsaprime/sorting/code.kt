@@ -15,9 +15,9 @@ private class SelectionSort {
     */
     fun sort(array: Array<Int>) {
         // Traverse through all array elements
-        for (i in 0..array.size - 1) {
+        for (i in array.indices) {
             // Find the minimum element in unsorted array
-            for (j in i..array.size - 1) {
+            for (j in i..<array.size) {
                 // Swap if the element found is smaller than the current element
                 if (array[i] > array[j]) {
                     // Swapping without using a temporary variable
@@ -42,7 +42,7 @@ private class BubbleSort {
         // Outer loop for each pass
         for (i in 0..lastIdx) {
             // Inner loop for pairwise comparison
-            for (j in 0..lastIdx - 1) {
+            for (j in 0..< lastIdx) {
                 // Swap if the current element is greater than the next
                 if (array[j] > array[j + 1]) {
                     // Swapping without using a temporary variable
@@ -214,7 +214,7 @@ private class QuickSort {
      * @return The final index of the pivot element.
      */
     private fun partition(arr: Array<Int>, low: Int, high: Int): Int{
-        var pivot = arr[low]
+        val pivot = arr[low]
         var i = low
         var j = high
         // Move indices towards each other and swap elements as needed
